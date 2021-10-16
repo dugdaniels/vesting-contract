@@ -113,7 +113,7 @@ describe("Entitlement contract", () => {
       ).to.be.revertedWith("Only the recipeient can claim funds");
     });
 
-    it("Should set entitlement status to completed when claimed", async () => {
+    it("Should set entitlement status to completed", async () => {
       await entitlement.fundEntitlement();
       await network.provider.send("evm_increaseTime", [period * secondsPerDay]);
       await entitlement.connect(recipient).claim();
@@ -136,6 +136,19 @@ describe("Entitlement contract", () => {
       await entitlement.terminate();
       expect(await testToken.balanceOf(recipient.address)).to.equal(amount);
     });
+
+    it("Should only allow the owner to terminate the entitlement", async () => {
+      await entitlement.fundEntitlement();
+      await expect(
+        entitlement.connect(recipient).terminate()
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+
+    it("Should set entitlement status to completed", async () => {
+      await entitlement.fundEntitlement();
+      await entitlement.terminate();
+      expect(await entitlement.status()).to.equal(2);
+    }); 
   });
 
   describe("Accelerating payout", () => {
