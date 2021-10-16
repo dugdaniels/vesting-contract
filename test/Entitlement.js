@@ -113,6 +113,12 @@ describe("Entitlement contract", () => {
       ).to.be.revertedWith("Only the recipeient can claim funds");
     });
 
+    it("Should only allow claming if entitlement is active", async () => {
+      await expect(
+        entitlement.connect(recipient).claim()
+      ).to.be.revertedWith("Entitlement is not active");
+    });
+
     it("Should set entitlement status to completed", async () => {
       await entitlement.fundEntitlement();
       await network.provider.send("evm_increaseTime", [period * secondsPerDay]);
@@ -144,6 +150,12 @@ describe("Entitlement contract", () => {
       ).to.be.revertedWith("Ownable: caller is not the owner");
     });
 
+    it("Should only allow termination if entitlement is active", async () => {
+      await expect(
+        entitlement.terminate()
+      ).to.be.revertedWith("Entitlement is not active");
+    });
+
     it("Should set entitlement status to completed", async () => {
       await entitlement.fundEntitlement();
       await entitlement.terminate();
@@ -163,6 +175,12 @@ describe("Entitlement contract", () => {
       await expect(
         entitlement.connect(recipient).accelerate()
       ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+
+    it("Should only allow acceleration if entitlement is active", async () => {
+      await expect(
+        entitlement.accelerate()
+      ).to.be.revertedWith("Entitlement is not active");
     });
   });
 
