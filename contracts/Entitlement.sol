@@ -14,7 +14,6 @@ contract Entitlement is Ownable {
         Completed
     }
 
-    address depositor;
     address public recipient;
     address public token;
     uint public amount;
