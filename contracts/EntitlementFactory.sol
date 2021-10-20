@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 
 import "./Entitlement.sol";
 
-contract EntitlementFactory {
+contract EntitlementFactory {   
 
-    Entitlement[] public entitlements;
+Entitlement[] public entitlements;
 
     mapping(address => address[]) entitlementsCreated;
     mapping(address => address[]) entitlementsRecieved;
